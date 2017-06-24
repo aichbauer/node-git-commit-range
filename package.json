@@ -2,6 +2,7 @@
   "name": "git-commit-range",
   "version": "1.0.0",
   "description": "Get the git commithash within a Range from-to",
+  "main": "build.js",
   "scripts": {
     "pretest": "npm run lint",
     "test": "nyc ava -s",
