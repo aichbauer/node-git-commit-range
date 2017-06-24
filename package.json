@@ -1,6 +1,6 @@
 {
   "name": "git-commit-range",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Get the git commithash within a Range from-to",
   "scripts": {
     "pretest": "npm run lint",
