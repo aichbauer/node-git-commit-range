@@ -21,7 +21,6 @@ install:
       }
   # install modules
   - npm config set loglevel warn
-  - npm i -g npm
   - npm i
 
 # Post-install test scripts.
