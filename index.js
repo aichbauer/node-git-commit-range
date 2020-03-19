@@ -6,7 +6,15 @@ import pathIsAbsolute from 'path-is-absolute';
 
 const cwd = process.cwd();
 
-const getCommitRange = ({ path, from, to, include, short } = {}) => {
+const getCommitRange = (options = {}) => {
+  const {
+    path,
+    from,
+    to,
+    include,
+    short,
+    type,
+  } = options;
   const commits = [];
   const thisFrom = from || '';
   const thisTo = to || '';
@@ -25,19 +33,21 @@ const getCommitRange = ({ path, from, to, include, short } = {}) => {
     return [];
   }
 
+  const format = type === 'text' ? 'B' : 'H';
+
   try {
     let commitRangeExec;
     if (platform() === 'win32') {
       if (!thisFrom) {
-        commitRangeExec = `pushd ${thisPath} & git --no-pager log --format=format:%H`;
+        commitRangeExec = `pushd ${thisPath} & git --no-pager log --format=format:%${format}`;
       } else {
-        commitRangeExec = `pushd ${thisPath} & git --no-pager log ${thisFrom}...${thisTo} --format=format:%H`;
+        commitRangeExec = `pushd ${thisPath} & git --no-pager log ${thisFrom}...${thisTo} --format=format:%${format}`;
       }
     } else {
       if (!thisFrom) { // eslint-disable-line
-        commitRangeExec = `(cd ${thisPath} ; git --no-pager log --format=format:%H )`;
+        commitRangeExec = `(cd ${thisPath} ; git --no-pager log --format=format:%${format} )`;
       } else {
-        commitRangeExec = `(cd ${thisPath} ; git --no-pager log ${thisFrom}...${thisTo} --format=format:%H )`;
+        commitRangeExec = `(cd ${thisPath} ; git --no-pager log ${thisFrom}...${thisTo} --format=format:%${format} )`;
       }
     }
 
@@ -56,7 +66,7 @@ const getCommitRange = ({ path, from, to, include, short } = {}) => {
       commits.pop();
     }
 
-    return commits;
+    return commits.filter(Boolean);
   } catch (err) {
     return [];
   }

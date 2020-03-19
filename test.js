@@ -119,3 +119,41 @@ test.serial('GET COMMIT RANGE | give me all commits (short hash) since the begin
     '6a82077',
   ]);
 });
+
+test.serial('GET COMMIT RANGE | return all commit messages', async (t) => {
+  const commits = await getCommitRange({
+    path: 'test/fixtures/repo-ten-commits',
+    type: 'text',
+  });
+
+  t.deepEqual(commits, [
+    'Feat: thats the 10th commit',
+    'Style: thats the 9th commit',
+    'Feat: thats the 8th commit',
+    'CI: thats the 7th commit',
+    'Chore: thats the 6th commit',
+    'Chore: thats the fifth commit',
+    'Chore: thats the fourth commit',
+    'Chore: thats the third commit',
+    'Chore: thats the second commit',
+    'Initial commit',
+  ]);
+});
+
+test.serial('GET COMMIT RANGE | return all commit messages within a range', async (t) => {
+  const commits = await getCommitRange({
+    path: 'test/fixtures/repo-ten-commits',
+    type: 'text',
+    from: 'ee1db4e',
+    to: '4892d8c',
+  });
+
+  t.deepEqual(commits, [
+    'Style: thats the 9th commit',
+    'Feat: thats the 8th commit',
+    'CI: thats the 7th commit',
+    'Chore: thats the 6th commit',
+    'Chore: thats the fifth commit',
+    'Chore: thats the fourth commit',
+  ]);
+});
