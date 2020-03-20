@@ -1,4 +1,3 @@
-import test from 'ava';
 import path from 'path';
 import { homedir } from 'os';
 import fs from 'fs';
@@ -7,15 +6,17 @@ import getCommitRange from './index';
 
 const fixtures = path.join(process.cwd(), 'test', 'fixtures');
 
-test.before('move git to .git', async () => {
+beforeAll(async () => {
+  // move git to .git
   await fs.renameSync(path.join(fixtures, 'repo-ten-commits', 'git'), path.join(fixtures, 'repo-ten-commits', '.git'));
 });
 
-test.after.always('move .git to git', async () => {
+afterAll(async () => {
+  // move .git to git
   await fs.renameSync(path.join(fixtures, 'repo-ten-commits', '.git'), path.join(fixtures, 'repo-ten-commits', 'git'));
 });
 
-test.serial('GET COMMIT RANGE | not a repositrory', async (t) => {
+it('GET COMMIT RANGE | not a repositrory', async () => {
   const cwd = process.cwd();
 
   await process.chdir(homedir());
@@ -24,12 +25,12 @@ test.serial('GET COMMIT RANGE | not a repositrory', async (t) => {
     path: homedir(),
   });
 
-  t.deepEqual(commits, []);
+  expect(commits).toEqual([]);
 
   await process.chdir(cwd);
 });
 
-test.serial('GET COMMIT RANGE | get all commits INCLUDING from and to', async (t) => {
+it('GET COMMIT RANGE | get all commits INCLUDING from and to', async () => {
   await process.chdir('test/fixtures/repo-ten-commits');
 
   const cwd = process.cwd();
@@ -40,7 +41,7 @@ test.serial('GET COMMIT RANGE | get all commits INCLUDING from and to', async (t
     to: '6bca03f01b3b8ad152b7c2562ff92aa48a8d41a5',
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     '15be93c31ad87c9ced03ba0b60fc2fb55c977c5c',
     'ee1db4e07af7a26061f569a3d3dc123007e001c7',
     '90caf4f45547a02c585dfed6639e20288d15c346',
@@ -49,7 +50,7 @@ test.serial('GET COMMIT RANGE | get all commits INCLUDING from and to', async (t
   await process.chdir('../../..');
 });
 
-test.serial('GET COMMIT RANGE | get all commits EXCLUDING from and to', async (t) => {
+it('GET COMMIT RANGE | get all commits EXCLUDING from and to', async () => {
   await process.chdir('test/fixtures/repo-ten-commits');
 
   const cwd = process.cwd();
@@ -61,14 +62,14 @@ test.serial('GET COMMIT RANGE | get all commits EXCLUDING from and to', async (t
     include: false,
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     'ee1db4e07af7a26061f569a3d3dc123007e001c7',
   ]);
 
   await process.chdir('../../..');
 });
 
-test.serial('GET COMMIT RANGE | test not absolute path', async (t) => {
+it('GET COMMIT RANGE | test not absolute path', async () => {
   const commits = await getCommitRange({
     path: 'test/fixtures/repo-ten-commits',
     from: '15be93c31ad87c9ced03ba0b60fc2fb55c977c5c',
@@ -76,17 +77,17 @@ test.serial('GET COMMIT RANGE | test not absolute path', async (t) => {
     include: false,
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     'ee1db4e07af7a26061f569a3d3dc123007e001c7',
   ]);
 });
 
-test.serial('GET COMMIT RANGE | give me all commits since the beginning', async (t) => {
+it('GET COMMIT RANGE | give me all commits since the beginning', async () => {
   const commits = await getCommitRange({
     path: 'test/fixtures/repo-ten-commits',
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     '15be93c31ad87c9ced03ba0b60fc2fb55c977c5c',
     'ee1db4e07af7a26061f569a3d3dc123007e001c7',
     '90caf4f45547a02c585dfed6639e20288d15c346',
@@ -100,13 +101,13 @@ test.serial('GET COMMIT RANGE | give me all commits since the beginning', async 
   ]);
 });
 
-test.serial('GET COMMIT RANGE | give me all commits (short hash) since the beginning', async (t) => {
+it('GET COMMIT RANGE | give me all commits (short hash) since the beginning', async () => {
   const commits = await getCommitRange({
     path: 'test/fixtures/repo-ten-commits',
     short: true,
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     '15be93c',
     'ee1db4e',
     '90caf4f',
