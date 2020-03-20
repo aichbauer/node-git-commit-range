@@ -121,13 +121,13 @@ it('GET COMMIT RANGE | give me all commits (short hash) since the beginning', as
   ]);
 });
 
-test.serial('GET COMMIT RANGE | return all commit messages', async (t) => {
+it('GET COMMIT RANGE | return all commit messages', async () => {
   const commits = await getCommitRange({
     path: 'test/fixtures/repo-ten-commits',
     type: 'text',
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     'Feat: thats the 10th commit',
     'Style: thats the 9th commit',
     'Feat: thats the 8th commit',
@@ -141,7 +141,7 @@ test.serial('GET COMMIT RANGE | return all commit messages', async (t) => {
   ]);
 });
 
-test.serial('GET COMMIT RANGE | return all commit messages within a range', async (t) => {
+it('GET COMMIT RANGE | return all commit messages within a range', async () => {
   const commits = await getCommitRange({
     path: 'test/fixtures/repo-ten-commits',
     type: 'text',
@@ -149,7 +149,7 @@ test.serial('GET COMMIT RANGE | return all commit messages within a range', asyn
     to: '4892d8c',
   });
 
-  t.deepEqual(commits, [
+  expect(commits).toEqual([
     'Style: thats the 9th commit',
     'Feat: thats the 8th commit',
     'CI: thats the 7th commit',
