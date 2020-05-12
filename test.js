@@ -170,10 +170,7 @@ it('GET COMMIT RANGE | return all commit messages within a range with longer tex
 
   expect(commits).toEqual([
     'Chore: thats the fourth commit',
-    `Chore: thats the third commit
-With
-more
-text`,
+    'Chore: thats the third commit\nWith\nmore\ntext',
     `Chore: thats the second commit
 
 With a body`,
