@@ -54,7 +54,7 @@ const getCommitRange = (options = {}) => {
     getCommits = execa.shellSync(commitRangeExec).stdout;
     getCommits = getCommits
       .split('{{gitCommitRangeEnd}}')
-      .map(s => s.trim())
+      .map((s) => s.trim())
       .filter(Boolean);
 
     getCommits.forEach((commithash) => {
