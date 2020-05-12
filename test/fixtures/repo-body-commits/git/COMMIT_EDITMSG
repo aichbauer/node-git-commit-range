@@ -1,0 +1,22 @@
+ Feat: thats the 10th commit
+
+
+
+some more spaces
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    aichbauer <rudolfson.junior@gmail.com>
+# Date:      Sat Jun 24 11:37:22 2017 +0200
+#
+# interactive rebase in progress; onto 6248d8b
+# Last commands done (10 commands done):
+#    pick ee1db4e Style: thats the 9th commit
+#    reword 15be93c Feat: thats the 10th commit
+# No commands remaining.
+# You are currently editing a commit while rebasing branch 'master' on '6248d8b'.
+#
+# Changes to be committed:
+#	new file:   10.js
+#

@@ -9,11 +9,13 @@ const fixtures = path.join(process.cwd(), 'test', 'fixtures');
 beforeAll(async () => {
   // move git to .git
   await fs.renameSync(path.join(fixtures, 'repo-ten-commits', 'git'), path.join(fixtures, 'repo-ten-commits', '.git'));
+  await fs.renameSync(path.join(fixtures, 'repo-body-commits', 'git'), path.join(fixtures, 'repo-body-commits', '.git'));
 });
 
 afterAll(async () => {
   // move .git to git
   await fs.renameSync(path.join(fixtures, 'repo-ten-commits', '.git'), path.join(fixtures, 'repo-ten-commits', 'git'));
+  await fs.renameSync(path.join(fixtures, 'repo-body-commits', '.git'), path.join(fixtures, 'repo-body-commits', 'git'));
 });
 
 it('GET COMMIT RANGE | not a repositrory', async () => {
@@ -156,5 +158,25 @@ it('GET COMMIT RANGE | return all commit messages within a range', async () => {
     'Chore: thats the 6th commit',
     'Chore: thats the fifth commit',
     'Chore: thats the fourth commit',
+  ]);
+});
+
+it('GET COMMIT RANGE | return all commit messages within a range with longer text messages', async () => {
+  const commits = await getCommitRange({
+    path: 'test/fixtures/repo-body-commits',
+    type: 'text',
+    include: true,
+  });
+
+  expect(commits).toEqual([
+    'Chore: thats the fourth commit',
+    `Chore: thats the third commit
+With
+more
+text`,
+    `Chore: thats the second commit
+
+With a body`,
+    'Initial commit',
   ]);
 });
