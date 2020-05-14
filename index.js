@@ -39,20 +39,24 @@ const getCommitRange = (options = {}) => {
     let commitRangeExec;
     if (platform() === 'win32') {
       if (!thisFrom) {
-        commitRangeExec = `pushd ${thisPath} & git --no-pager log --format=format:%${format}`;
+        commitRangeExec = `pushd ${thisPath} & git --no-pager log --format=format:"%${format}{{gitCommitRangeEnd}}"`;
       } else {
-        commitRangeExec = `pushd ${thisPath} & git --no-pager log ${thisFrom}...${thisTo} --format=format:%${format}`;
+        commitRangeExec = `pushd ${thisPath} & git --no-pager log ${thisFrom}...${thisTo} --format=format:"%${format}{{gitCommitRangeEnd}}"`;
       }
     } else {
       if (!thisFrom) { // eslint-disable-line
-        commitRangeExec = `(cd ${thisPath} ; git --no-pager log --format=format:%${format} )`;
+        commitRangeExec = `(cd ${thisPath} ; git --no-pager log --format=format:"%${format}{{gitCommitRangeEnd}}" )`;
       } else {
-        commitRangeExec = `(cd ${thisPath} ; git --no-pager log ${thisFrom}...${thisTo} --format=format:%${format} )`;
+        commitRangeExec = `(cd ${thisPath} ; git --no-pager log ${thisFrom}...${thisTo} --format=format:"%${format}{{gitCommitRangeEnd}}" )`;
       }
     }
 
     getCommits = execa.shellSync(commitRangeExec).stdout;
-    getCommits = getCommits.split('\n');
+    getCommits = getCommits
+      .split('{{gitCommitRangeEnd}}')
+      .map((s) => s.trim())
+      .filter(Boolean);
+
     getCommits.forEach((commithash) => {
       if (thisShort) {
         return commits.push(commithash.substring(0, 7));
@@ -66,7 +70,7 @@ const getCommitRange = (options = {}) => {
       commits.pop();
     }
 
-    return commits.filter(Boolean);
+    return commits;
   } catch (err) {
     return [];
   }
