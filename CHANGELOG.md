@@ -1,3 +1,7 @@
+1.1.1 - May, 14 2020
+
+* 4b87074 Fix: correctly get whole body of commit messages (#6) (Jan Peer Stöcklmair)
+
 1.1.0 - March, 20 2020
 
 * 5b73705 Chore: update eslint (#5) (Lukas Aichbauer)
