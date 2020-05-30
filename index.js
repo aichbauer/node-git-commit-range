@@ -12,6 +12,7 @@ const getCommitRange = (options = {}) => {
     from,
     to,
     include,
+    includeMerges = true,
     short,
     type,
   } = options;
@@ -34,20 +35,21 @@ const getCommitRange = (options = {}) => {
   }
 
   const format = type === 'text' ? 'B' : 'H';
+  const mergeFlag = includeMerges ? '' : '--no-merges';
 
   try {
     let commitRangeExec;
     if (platform() === 'win32') {
       if (!thisFrom) {
-        commitRangeExec = `pushd ${thisPath} & git --no-pager log --format=format:"%${format}{{gitCommitRangeEnd}}"`;
+        commitRangeExec = `pushd ${thisPath} & git --no-pager log --format=format:"%${format}{{gitCommitRangeEnd}}" ${mergeFlag}`;
       } else {
-        commitRangeExec = `pushd ${thisPath} & git --no-pager log ${thisFrom}...${thisTo} --format=format:"%${format}{{gitCommitRangeEnd}}"`;
+        commitRangeExec = `pushd ${thisPath} & git --no-pager log ${thisFrom}...${thisTo} --format=format:"%${format}{{gitCommitRangeEnd}}" ${mergeFlag}`;
       }
     } else {
       if (!thisFrom) { // eslint-disable-line
-        commitRangeExec = `(cd ${thisPath} ; git --no-pager log --format=format:"%${format}{{gitCommitRangeEnd}}" )`;
+        commitRangeExec = `(cd ${thisPath} ; git --no-pager log --format=format:"%${format}{{gitCommitRangeEnd}}" ${mergeFlag})`;
       } else {
-        commitRangeExec = `(cd ${thisPath} ; git --no-pager log ${thisFrom}...${thisTo} --format=format:"%${format}{{gitCommitRangeEnd}}" )`;
+        commitRangeExec = `(cd ${thisPath} ; git --no-pager log ${thisFrom}...${thisTo} --format=format:"%${format}{{gitCommitRangeEnd}}" ${mergeFlag})`;
       }
     }
 

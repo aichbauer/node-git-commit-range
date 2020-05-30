@@ -10,12 +10,14 @@ beforeAll(async () => {
   // move git to .git
   await fs.renameSync(path.join(fixtures, 'repo-ten-commits', 'git'), path.join(fixtures, 'repo-ten-commits', '.git'));
   await fs.renameSync(path.join(fixtures, 'repo-body-commits', 'git'), path.join(fixtures, 'repo-body-commits', '.git'));
+  await fs.renameSync(path.join(fixtures, 'repo-merge', 'git'), path.join(fixtures, 'repo-merge', '.git'));
 });
 
 afterAll(async () => {
   // move .git to git
   await fs.renameSync(path.join(fixtures, 'repo-ten-commits', '.git'), path.join(fixtures, 'repo-ten-commits', 'git'));
   await fs.renameSync(path.join(fixtures, 'repo-body-commits', '.git'), path.join(fixtures, 'repo-body-commits', 'git'));
+  await fs.renameSync(path.join(fixtures, 'repo-merge', '.git'), path.join(fixtures, 'repo-merge', 'git'));
 });
 
 it('GET COMMIT RANGE | not a repositrory', async () => {
@@ -175,5 +177,35 @@ it('GET COMMIT RANGE | return all commit messages within a range with longer tex
 
 With a body`,
     'Initial commit',
+  ]);
+});
+
+it('GET COMMIT RANGE | do NOT include merge commits', async () => {
+  const commits = await getCommitRange({
+    path: 'test/fixtures/repo-merge',
+    type: 'text',
+    include: true,
+    includeMerges: false,
+  });
+
+  expect(commits).toEqual([
+    'Third commit',
+    'Second commit',
+    'First commit',
+  ]);
+});
+
+it('GET COMMIT RANGE | include merge commits', async () => {
+  const commits = await getCommitRange({
+    path: 'test/fixtures/repo-merge',
+    type: 'text',
+    include: true,
+  });
+
+  expect(commits).toEqual([
+    "Merge branch 'feat/check'",
+    'Third commit',
+    'Second commit',
+    'First commit',
   ]);
 });

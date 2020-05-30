@@ -51,6 +51,13 @@ gitCommitRange({
   to: '32b940b014322834966d79b109d2d7adec8e3ea3',
   short: true,
 }); // returns all commits (short hash) between from and to INCLUDING from and to, of the path 'my/repo'
+
+gitCommitRange({
+  path: 'my/repo',
+  from: '15be93c31ad87c9ced03ba0b60fc2fb55c977c5c',
+  to: '32b940b014322834966d79b109d2d7adec8e3ea3',
+  includeMerges: false,
+}); // returns all commits between from and to EXCLUDING all merge commits, of the path 'my/repo'
 ```
 
 ## LICENSE
