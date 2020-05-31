@@ -1,3 +1,7 @@
+1.2.0 - May, 31 2020
+
+* 01c6537 Feat: exclude merges with option flag (#7) (Jan Peer Stöcklmair)
+
 1.1.1 - May, 14 2020
 
 * 4b87074 Fix: correctly get whole body of commit messages (#6) (Jan Peer Stöcklmair)
