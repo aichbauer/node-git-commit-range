@@ -3,8 +3,16 @@ import isGit from 'is-git-repository';
 import { platform } from 'os';
 import makepath from 'path';
 import pathIsAbsolute from 'path-is-absolute';
+import shellescape from 'shell-escape';
 
 const cwd = process.cwd();
+
+var escapeShell = function(cmd) {
+  if(cmd !== undefined){
+    var arg = cmd.toString().split(" ");
+    return shellescape(arg);
+  }
+}
 
 const getCommitRange = (options = {}) => {
   const {
@@ -29,6 +37,11 @@ const getCommitRange = (options = {}) => {
   let getCommits;
 
   thisPath = pathIsAbsolute(thisPath) ? thisPath : makepath.join(cwd, thisPath);
+  
+  // escaping bad shell arguments
+  thisPath = escapeShell(thisPath);
+  thisFrom = escapeShell(thisFrom);
+  thisTo = escapeShell(thisTo);
 
   if (!isGit(thisPath)) {
     return [];
